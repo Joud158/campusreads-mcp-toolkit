@@ -1,0 +1,43 @@
+DISCOVERED EXACTLY THREE TOOLS: search_catalog, save_reading_item, plan_reading
+
+CLIENT -> SERVER: search_catalog {"query": "agents"}
+SERVER -> CLIENT: {"meta":{"io.modelcontextprotocol/serverInfo":{"name":"CampusReads","version":"4.1.4"}},"content":[{"type":"text","text":"{\"query\":\"agents\",\"total_matches\":2,\"books\":[{\"book_id\":\"B001\",\"title\":\"Artificial Intelligence: A Modern Approach\",\"author\":\"Stuart Russell and Peter Norvig\",\"topics\":[\"artificial intelligence\",\"agents\",\"search\",\"planning\"]},{\"book_id\":\"B005\",\"title\":\"Reinforcement Learning: An Introduction\",\"author\":\"Richard S. Sutton and Andrew G. Barto\",\"topics\":[\"reinforcement learning\",\"agents\",\"decision making\"]}]}"}],"structured_content":{"query":"agents","total_matches":2,"books":[{"book_id":"B001","title":"Artificial Intelligence: A Modern Approach","author":"Stuart Russell and Peter Norvig","topics":["artificial intelligence","agents","search","planning"]},{"book_id":"B005","title":"Reinforcement Learning: An Introduction","author":"Richard S. Sutton and Andrew G. Barto","topics":["reinforcement learning","agents","decision making"]}]},"is_error":false,"result_type":"complete"}
+
+CLIENT -> SERVER: save_reading_item {"book_id": "B001", "list_name": "demo"}
+SERVER -> CLIENT: {"meta":{"io.modelcontextprotocol/serverInfo":{"name":"CampusReads","version":"4.1.4"}},"content":[{"type":"text","text":"{\"status\":\"created\",\"list_name\":\"demo\",\"book\":{\"book_id\":\"B001\",\"title\":\"Artificial Intelligence: A Modern Approach\",\"author\":\"Stuart Russell and Peter Norvig\",\"topics\":[\"artificial intelligence\",\"agents\",\"search\",\"planning\"]},\"saved_at\":\"2026-10-31T17:13:49.089203+00:00\"}"}],"structured_content":{"status":"created","list_name":"demo","book":{"book_id":"B001","title":"Artificial Intelligence: A Modern Approach","author":"Stuart Russell and Peter Norvig","topics":["artificial intelligence","agents","search","planning"]},"saved_at":"2026-10-31T17:13:49.089203+00:00"},"is_error":false,"result_type":"complete"}
+
+CLIENT -> SERVER: plan_reading {"query": "machine learning", "list_name": "demo"}
+SERVER -> CLIENT: {"meta":{"io.modelcontextprotocol/serverInfo":{"name":"CampusReads","version":"4.1.4"}},"content":[{"type":"text","text":"{\"query\":\"machine learning\",\"selection_rule\":\"First title alphabetically (book ID breaks ties).\",\"steps\":[\"search_catalog\",\"save_reading_item\"],\"saved\":{\"status\":\"created\",\"list_name\":\"demo\",\"book\":{\"book_id\":\"B004\",\"title\":\"Deep Learning\",\"author\":\"Ian Goodfellow, Yoshua Bengio, and Aaron Courville\",\"topics\":[\"machine learning\",\"neural networks\",\"artificial intelligence\"]},\"saved_at\":\"2026-10-31T17:13:49.105671+00:00\"}}"}],"structured_content":{"query":"machine learning","selection_rule":"First title alphabetically (book ID breaks ties).","steps":["search_catalog","save_reading_item"],"saved":{"status":"created","list_name":"demo","book":{"book_id":"B004","title":"Deep Learning","author":"Ian Goodfellow, Yoshua Bengio, and Aaron Courville","topics":["machine learning","neural networks","artificial intelligence"]},"saved_at":"2026-10-31T17:13:49.105671+00:00"}},"is_error":false,"result_type":"complete"}
+
+CLIENT -> SERVER: plan_reading {"query": "machine learning", "list_name": "demo"}
+SERVER -> CLIENT: {"meta":{"io.modelcontextprotocol/serverInfo":{"name":"CampusReads","version":"4.1.4"}},"content":[{"type":"text","text":"{\"query\":\"machine learning\",\"selection_rule\":\"First title alphabetically (book ID breaks ties).\",\"steps\":[\"search_catalog\",\"save_reading_item\"],\"saved\":{\"status\":\"already_saved\",\"list_name\":\"demo\",\"book\":{\"book_id\":\"B004\",\"title\":\"Deep Learning\",\"author\":\"Ian Goodfellow, Yoshua Bengio, and Aaron Courville\",\"topics\":[\"machine learning\",\"neural networks\",\"artificial intelligence\"]},\"saved_at\":\"2026-10-31T17:13:49.105671+00:00\"}}"}],"structured_content":{"query":"machine learning","selection_rule":"First title alphabetically (book ID breaks ties).","steps":["search_catalog","save_reading_item"],"saved":{"status":"already_saved","list_name":"demo","book":{"book_id":"B004","title":"Deep Learning","author":"Ian Goodfellow, Yoshua Bengio, and Aaron Courville","topics":["machine learning","neural networks","artificial intelligence"]},"saved_at":"2026-10-31T17:13:49.105671+00:00"}},"is_error":false,"result_type":"complete"}
+
+CLIENT -> SERVER: search_catalog {"query": "   "}
+SERVER -> CLIENT: {"meta":{"io.modelcontextprotocol/serverInfo":{"name":"CampusReads","version":"4.1.4"}},"content":[{"type":"text","text":"INVALID_INPUT: query must contain 1-120 characters after trimming."}],"is_error":true,"result_type":"complete"}
+
+CLIENT -> SERVER: save_reading_item {"book_id": "B999", "list_name": "demo"}
+SERVER -> CLIENT: {"meta":{"io.modelcontextprotocol/serverInfo":{"name":"CampusReads","version":"4.1.4"}},"content":[{"type":"text","text":"BOOK_NOT_FOUND: No catalog book has ID B999; search the catalog first."}],"is_error":true,"result_type":"complete"}
+
+CLIENT -> SERVER: plan_reading {"query": "underwater basket weaving", "list_name": "demo"}
+SERVER -> CLIENT: {"meta":{"io.modelcontextprotocol/serverInfo":{"name":"CampusReads","version":"4.1.4"}},"content":[{"type":"text","text":"NO_MATCHES: No book matches 'underwater basket weaving'; try a broader topic. Nothing was saved."}],"is_error":true,"result_type":"complete"}
+
+PERSISTENCE VERIFIED: [('demo', 'B001'), ('demo', 'B004')]
+PASS: discovery, all three tools, duplicate safety, and all three failure cases.
+This is a protocol demonstration, not an LLM-selected agent run. Use agent --demo for that.
+
+--- SERVER STDERR ---
+[10/31/26 19:13:48] INFO     Starting MCP server 'CampusReads' transport.py:241
+                             with transport 'stdio'                            
+[SERVER] DATA search_catalog query='agents'
+[SERVER] ACTION save_reading_item book_id='B001' list='demo'
+[SERVER] ORCHESTRATION plan_reading query='machine learning' list='demo'
+[SERVER] ORCHESTRATION completed: search_catalog -> save_reading_item (created)
+[SERVER] ORCHESTRATION plan_reading query='machine learning' list='demo'
+[SERVER] ORCHESTRATION completed: search_catalog -> save_reading_item (already_saved)
+[SERVER] DATA search_catalog query='   '
+[10/31/26 19:13:49] Error calling tool 'search_catalog'                        
+[SERVER] ACTION save_reading_item book_id='B999' list='demo'
+                    Error calling tool 'save_reading_item'                     
+[SERVER] ORCHESTRATION plan_reading query='underwater basket weaving' list='demo'
+[SERVER] ORCHESTRATION failed: NO_MATCHES: No book matches 'underwater basket weaving'; try a broader topic. Nothing was saved.
+                    Error calling tool 'plan_reading'                          
