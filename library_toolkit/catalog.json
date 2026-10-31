@@ -1,0 +1,8 @@
+[
+  {"book_id":"B001","title":"Artificial Intelligence: A Modern Approach","author":"Stuart Russell and Peter Norvig","topics":["artificial intelligence","agents","search","planning"]},
+  {"book_id":"B002","title":"Designing Data-Intensive Applications","author":"Martin Kleppmann","topics":["databases","distributed systems","software engineering"]},
+  {"book_id":"B003","title":"Introduction to Algorithms","author":"Thomas H. Cormen et al.","topics":["algorithms","data structures","computer science"]},
+  {"book_id":"B004","title":"Deep Learning","author":"Ian Goodfellow, Yoshua Bengio, and Aaron Courville","topics":["machine learning","neural networks","artificial intelligence"]},
+  {"book_id":"B005","title":"Reinforcement Learning: An Introduction","author":"Richard S. Sutton and Andrew G. Barto","topics":["reinforcement learning","agents","decision making"]},
+  {"book_id":"B006","title":"Computer Networking: A Top-Down Approach","author":"James F. Kurose and Keith W. Ross","topics":["networks","internet","protocols"]}
+]
