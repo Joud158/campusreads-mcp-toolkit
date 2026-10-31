@@ -1,0 +1,8 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.env
+storage/
+*.pyc
+C5 - Agent Tools.pdf
+CampusReads-submission.zip
